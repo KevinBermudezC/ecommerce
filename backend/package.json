@@ -1,0 +1,29 @@
+{
+  "name": "ecommerce-backend",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/express": "^5.0.0",
+    "eslint": "^9.21.0",
+    "globals": "^16.0.0",
+    "nodemon": "^3.1.9",
+    "prisma": "^6.4.1"
+  }
+}
