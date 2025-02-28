@@ -1,13 +1,15 @@
 import {Router} from "express";
 import {createProduct,getAllProducts,getSingleProduct,updateProduct,deleteProduct} from "../controllers/products.controller.js";
 import categoryAndProductsMiddleware from "../middlewares/categoryAndProducts.middleware.js";
+import {productLimiter} from '../config/limiter.js'
+
 
 const productsRouter = Router();
 
 
-productsRouter.get("/", getAllProducts);
+productsRouter.get("/",productLimiter, getAllProducts);
 
-productsRouter.get("/:id", getSingleProduct);
+productsRouter.get("/:id",productLimiter, getSingleProduct);
 
 productsRouter.post("/create-product",categoryAndProductsMiddleware, createProduct);
 

@@ -8,4 +8,5 @@ export const {
 	DATABASE_URL,
 	JWT_SECRET, 
 	JWT_EXPIRES_IN,
+	FRONTEND_URL,
 } = process.env;
