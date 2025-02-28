@@ -1,10 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { useTheme } from '../../lib/useTheme';
+import { useAuth } from '@/lib/useAuth';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { isAuthenticated,user, logout } = useAuth();
+  const [authStatus, setAuthStatus] = useState(isAuthenticated);
+
+  useEffect(() => {
+    setAuthStatus(isAuthenticated);
+  }, [isAuthenticated, user]);
+  console.log("Auth status in Header:", isAuthenticated, user,authStatus);
 
   return (
     <header className={`${theme === 'dark' ? 'bg-gray-900' : 'bg-black'} text-white`}>
@@ -101,22 +115,60 @@ export default function Header() {
               </svg>
             </Link>
 
-            {/* User Avatar/Auth Button */}
-            <Link to="/auth" className="hover:text-gray-300">
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-            </Link>
+            {/* User Avatar/Auth Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger className="focus:outline-none">
+                {!isAuthenticated ? (
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                ) : (
+                  <div className="h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center text-white font-medium">
+                    {user?.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                {!isAuthenticated ? (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/auth?mode=login" className="w-full cursor-pointer">
+                        Sign In
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/auth?mode=register" className="w-full cursor-pointer">
+                        Sign Up
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile" className="w-full cursor-pointer">
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={logout}
+                      className="cursor-pointer"
+                    >
+                      Sign Out
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
@@ -131,7 +183,14 @@ export default function Header() {
           <Link to="/women" className="block hover:text-gray-300">Women</Link>
           <Link to="/kids" className="block hover:text-gray-300">Kids</Link>
           <Link to="/cart" className="block hover:text-gray-300">Cart</Link>
-          <Link to="/auth" className="block hover:text-gray-300">Login/Register</Link>
+          {isAuthenticated ? (
+            <>
+              <Link to="/profile" className="block hover:text-gray-300">Profile</Link>
+              <button onClick={logout} className="block w-full text-left hover:text-gray-300">Sign Out</button>
+            </>
+          ) : (
+            <Link to="/auth" className="block hover:text-gray-300">Login/Register</Link>
+          )}
           <button
             onClick={toggleTheme}
             className="block w-full text-left hover:text-gray-300"
