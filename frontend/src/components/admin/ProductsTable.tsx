@@ -46,6 +46,8 @@ const ProductsTable = () => {
         params.search = searchQuery;
       }
       
+      console.log('Fetching products with params:', params);
+      
       const response = await productService.getProducts(
         params.page, 
         params.limit, 
@@ -53,9 +55,15 @@ const ProductsTable = () => {
         params.search
       );
       
-      if (response && response.products) {
+      console.log('Products response in component:', response);
+      
+      if (response && Array.isArray(response.products)) {
         setProducts(response.products);
         setTotalPages(Math.ceil(response.totalCount / 10));
+      } else if (response && Array.isArray(response)) {
+        // Si la respuesta es un array directo de productos
+        setProducts(response);
+        setTotalPages(Math.ceil(response.length / 10));
       } else {
         setProducts([]);
         setTotalPages(0);

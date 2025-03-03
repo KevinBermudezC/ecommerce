@@ -14,10 +14,25 @@ interface CategoriesResponse {
 class CategoryService {
   async getCategories(page = 1, limit = 100): Promise<CategoriesResponse> {
     try {
+      console.log('🔍 Iniciando getCategories con parámetros:', { page, limit });
+      console.log('🔗 URL de la API:', import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000/api');
+      
       const response = await api.get(`/categories?page=${page}&limit=${limit}`);
+      console.log('✅ Respuesta de getCategories:', response.data);
+      
+      if (!response.data || !Array.isArray(response.data.categories)) {
+        console.error('❌ Respuesta inválida de getCategories:', response.data);
+        throw new Error('Formato de respuesta inválido');
+      }
+      
       return response.data;
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error('❌ Error detallado en getCategories:', {
+        error,
+        response: error.response,
+        request: error.request,
+        message: error.message
+      });
       throw error;
     }
   }

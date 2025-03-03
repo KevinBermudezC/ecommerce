@@ -11,21 +11,8 @@ interface Product {
   sizes: string[];
 }
 
-const mockProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Classic White Sneakers',
-    price: 99.99,
-    description: 'Premium quality sneakers perfect for everyday wear.',
-    image: '/product-1.jpg',
-    category: 'Shoes',
-    sizes: ['US 7', 'US 8', 'US 9', 'US 10']
-  },
-  // Add more mock products as needed
-];
-
 export default function AdminProducts() {
-  const [products, setProducts] = useState<Product[]>(mockProducts);
+  const [products, setProducts] = useState<Product[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 

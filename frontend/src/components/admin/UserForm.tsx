@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import { User as UserIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerContent, DrawerHeader, DrawerFooter } from '@/components/ui/drawer';
+import { Drawer, DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerDescription } from '@/components/ui/drawer';
 import { Skeleton } from '@/components/ui/skeleton';
 import { User } from '@/lib/services/userService';
 import userService from '@/lib/services/userService';
@@ -90,9 +91,13 @@ const UserForm = ({ userId, isOpen, onClose, onSuccess }: UserFormProps) => {
     <Drawer open={isOpen} onOpenChange={onClose}>
       <DrawerContent className="max-w-lg mx-auto">
         <DrawerHeader className="border-b pb-4">
-          <h2 className="text-lg font-semibold">
-            Editar Usuario
-          </h2>
+          <DrawerTitle className="text-lg font-semibold flex items-center gap-2">
+            <UserIcon className="h-5 w-5" />
+            {userId ? 'Editar Usuario' : 'Nuevo Usuario'}
+          </DrawerTitle>
+          <DrawerDescription>
+            {userId ? 'Modifica los datos del usuario existente' : 'Completa el formulario para crear un nuevo usuario'}
+          </DrawerDescription>
         </DrawerHeader>
         
         <div className="p-4">

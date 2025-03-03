@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { toast } from 'sonner';
-import { ArrowLeft, Package, Truck, CheckCircle2, Clock, AlertTriangle, Ban } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
+import { ArrowLeft, Package, Truck, CheckCircle2, Clock, AlertTriangle, Ban, FileText } from 'lucide-react';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from '@/components/ui/drawer';
 import { Separator } from '@/components/ui/separator';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Drawer, DrawerContent } from '@/components/ui/drawer';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import orderService, { Order } from '@/lib/services/orderService';
 
@@ -70,8 +68,17 @@ const OrderDetails = () => {
 // Versión modal/drawer (recibiendo props)
 const OrderDetailsModal = ({ orderId, isOpen, onClose, onStatusChange }: OrderModalProps) => {
   return (
-    <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Drawer open={isOpen} onOpenChange={onClose}>
       <DrawerContent className="h-[90vh] sm:h-[85vh]">
+        <DrawerHeader className="border-b pb-4">
+          <DrawerTitle className="text-lg font-semibold flex items-center gap-2">
+            <FileText className="h-5 w-5" />
+            Detalles del Pedido #{orderId}
+          </DrawerTitle>
+          <DrawerDescription>
+            Información completa y estado del pedido
+          </DrawerDescription>
+        </DrawerHeader>
         <div className="px-4 py-6 max-h-full overflow-auto">
           <OrderDetailsContent 
             orderIdString={orderId?.toString()} 
@@ -333,130 +340,117 @@ const OrderDetailsContent = ({
 
       <div className="grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Productos</h2>
-              <div className="space-y-4">
-                {order.items.map((item) => (
-                  <div key={item.id} className="flex justify-between items-center border-b pb-4 last:border-0 last:pb-0">
-                    <div className="flex space-x-4">
-                      <div className="h-16 w-16 rounded-md bg-secondary overflow-hidden">
-                        {item.product.imageUrl ? (
-                          <img 
-                            src={item.product.imageUrl} 
-                            alt={item.product.name} 
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <div className="h-full w-full flex items-center justify-center bg-secondary">
-                            <Package className="h-8 w-8 text-muted-foreground" />
-                          </div>
-                        )}
+          <div className="space-y-4">
+            {order.items.map((item) => (
+              <div key={item.id} className="flex justify-between items-center border-b pb-4 last:border-0 last:pb-0">
+                <div className="flex space-x-4">
+                  <div className="h-16 w-16 rounded-md bg-secondary overflow-hidden">
+                    {item.product.imageUrl ? (
+                      <img 
+                        src={item.product.imageUrl} 
+                        alt={item.product.name} 
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center bg-secondary">
+                        <Package className="h-8 w-8 text-muted-foreground" />
                       </div>
-                      <div>
-                        <h3 className="font-medium">{item.product.name}</h3>
-                        <p className="text-sm text-muted-foreground">
-                          {item.quantity} x {formatCurrency(item.unitPrice)}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="font-medium">{formatCurrency(item.quantity * item.unitPrice)}</p>
+                    )}
                   </div>
-                ))}
+                  <div>
+                    <h3 className="font-medium">{item.product.name}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {item.quantity} x {formatCurrency(item.unitPrice)}
+                    </p>
+                  </div>
+                </div>
+                <p className="font-medium">{formatCurrency(item.quantity * item.unitPrice)}</p>
               </div>
-            </CardContent>
-          </Card>
+            ))}
+          </div>
 
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Dirección de envío</h2>
-              <div className="space-y-1">
-                <p className="font-medium">{order.shippingAddress.fullName}</p>
-                <p>{order.shippingAddress.street}</p>
-                <p>{order.shippingAddress.city}, {order.shippingAddress.postalCode}</p>
-                <p>{order.shippingAddress.country}</p>
-                <p className="mt-2">{order.shippingAddress.phone}</p>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Dirección de envío</h2>
+            <div className="space-y-1">
+              <p className="font-medium">{order.shippingAddress.fullName}</p>
+              <p>{order.shippingAddress.street}</p>
+              <p>{order.shippingAddress.city}, {order.shippingAddress.postalCode}</p>
+              <p>{order.shippingAddress.country}</p>
+              <p className="mt-2">{order.shippingAddress.phone}</p>
+            </div>
+          </div>
         </div>
 
         <div className="space-y-6">
-          <Card>
-            <CardContent className="p-6 space-y-6">
-              <h2 className="text-xl font-semibold">Resumen</h2>
-              
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Resumen</h2>
+            
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Subtotal</span>
+                <span>{formatCurrency(order.subtotal)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Envío</span>
+                <span>{formatCurrency(order.shippingCost)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Impuestos</span>
+                <span>{formatCurrency(order.taxAmount)}</span>
+              </div>
+              <Separator className="my-2" />
+              <div className="flex justify-between font-bold">
+                <span>Total</span>
+                <span>{formatCurrency(order.total)}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Actualizar estado</h2>
+            
+            <div className="space-y-4">
               <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
-                  <span>{formatCurrency(order.subtotal)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Envío</span>
-                  <span>{formatCurrency(order.shippingCost)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Impuestos</span>
-                  <span>{formatCurrency(order.taxAmount)}</span>
-                </div>
-                <Separator className="my-2" />
-                <div className="flex justify-between font-bold">
-                  <span>Total</span>
-                  <span>{formatCurrency(order.total)}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6 space-y-4">
-              <h2 className="text-xl font-semibold">Actualizar estado</h2>
-              
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label htmlFor="status" className="text-sm font-medium">
-                    Estado del pedido
-                  </label>
-                  <Select 
-                    value={newStatus} 
-                    onValueChange={(value) => setNewStatus(value as OrderStatus)}
-                  >
-                    <SelectTrigger id="status">
-                      <SelectValue placeholder="Seleccionar estado" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="PENDING">Pendiente</SelectItem>
-                      <SelectItem value="PROCESSING">En proceso</SelectItem>
-                      <SelectItem value="SHIPPED">Enviado</SelectItem>
-                      <SelectItem value="DELIVERED">Entregado</SelectItem>
-                      <SelectItem value="CANCELLED">Cancelado</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <Button 
-                  className="w-full"
-                  disabled={order.status === newStatus || updating || !newStatus}
-                  onClick={handleStatusChange}
+                <label htmlFor="status" className="text-sm font-medium">
+                  Estado del pedido
+                </label>
+                <Select 
+                  value={newStatus} 
+                  onValueChange={(value) => setNewStatus(value as OrderStatus)}
                 >
-                  {updating ? 'Actualizando...' : 'Actualizar estado'}
-                </Button>
+                  <SelectTrigger id="status">
+                    <SelectValue placeholder="Seleccionar estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="PENDING">Pendiente</SelectItem>
+                    <SelectItem value="PROCESSING">En proceso</SelectItem>
+                    <SelectItem value="SHIPPED">Enviado</SelectItem>
+                    <SelectItem value="DELIVERED">Entregado</SelectItem>
+                    <SelectItem value="CANCELLED">Cancelado</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-            </CardContent>
-          </Card>
+              
+              <Button 
+                className="w-full"
+                disabled={order.status === newStatus || updating || !newStatus}
+                onClick={handleStatusChange}
+              >
+                {updating ? 'Actualizando...' : 'Actualizar estado'}
+              </Button>
+            </div>
+          </div>
 
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold mb-4">Información del cliente</h2>
-              <div className="space-y-1">
-                <p className="font-medium">{order.user.name || 'Cliente'}</p>
-                <p>{order.user.email}</p>
-                <p className="text-sm text-muted-foreground">
-                  Cliente desde {formatDate(order.user.createdAt)}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Información del cliente</h2>
+            <div className="space-y-1">
+              <p className="font-medium">{order.user.name || 'Cliente'}</p>
+              <p>{order.user.email}</p>
+              <p className="text-sm text-muted-foreground">
+                Cliente desde {formatDate(order.user.createdAt)}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

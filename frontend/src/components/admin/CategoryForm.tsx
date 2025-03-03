@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-
+import { FolderIcon } from 'lucide-react';
+import { Drawer, DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerDescription } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerContent, DrawerHeader, DrawerFooter } from '@/components/ui/drawer';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Category } from '@/lib/services/categoryService';
 import categoryService from '@/lib/services/categoryService';
@@ -92,9 +92,13 @@ const CategoryForm = ({ categoryId, isOpen, onClose, onSuccess }: CategoryFormPr
     <Drawer open={isOpen} onOpenChange={onClose}>
       <DrawerContent className="max-w-lg mx-auto">
         <DrawerHeader className="border-b pb-4">
-          <h2 className="text-lg font-semibold">
+          <DrawerTitle className="text-lg font-semibold flex items-center gap-2">
+            <FolderIcon className="h-5 w-5" />
             {categoryId ? 'Editar Categoría' : 'Nueva Categoría'}
-          </h2>
+          </DrawerTitle>
+          <DrawerDescription>
+            {categoryId ? 'Modifica los datos de la categoría existente' : 'Completa el formulario para crear una nueva categoría'}
+          </DrawerDescription>
         </DrawerHeader>
         
         <div className="p-4">
