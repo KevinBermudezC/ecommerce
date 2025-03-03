@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import authService from '@/lib/services/authService';
+import { useAuth } from '@/lib/useAuth';
 
 import { signUpSchema, type SignUpFormData } from '../../lib/schemas/auth';
 import { Button } from '../ui/button';
@@ -23,6 +23,7 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const { register } = useAuth();
 
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
@@ -39,13 +40,9 @@ export default function SignUp() {
     setIsLoading(true);
     
     try {
-      await authService.register({
-        name: data.name,
-        email: data.email,
-        password: data.password
-      });
-			console.log("Registering...", data);
-			toast.success('Registration successful!');
+      await register(data.name, data.email, data.password);
+      console.log("Registering...", data);
+      toast.success('Registration successful!');
       
       // Redirect to home page or dashboard after successful registration
       navigate('/');
@@ -61,20 +58,20 @@ export default function SignUp() {
   return (
     <div className="w-full max-w-md space-y-8">
       <div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-6 text-center text-3xl font-extrabold dark:text-white text-gray-900">
           Create your account
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="mt-2 text-center text-sm dark:text-gray-300 text-gray-600">
           Already have an account?{' '}
-          <a href="/auth?mode=login" className="font-medium text-black hover:text-gray-800">
+          <a href="/auth?mode=login" className="font-medium dark:text-white dark:hover:text-gray-300 text-black hover:text-gray-800">
             Sign in
           </a>
         </p>
       </div>
 
       {formError && (
-        <div className="bg-red-50 border-l-4 border-red-400 p-4">
-          <p className="text-red-700">{formError}</p>
+        <div className="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-400 p-4">
+          <p className="text-red-700 dark:text-red-400">{formError}</p>
         </div>
       )}
 
@@ -91,10 +88,11 @@ export default function SignUp() {
                     placeholder="Full Name" 
                     type="text"
                     autoComplete="name"
+                    className="dark:bg-gray-800 dark:text-white dark:border-gray-700"
                     {...field} 
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="dark:text-red-400" />
               </FormItem>
             )}
           />
@@ -110,10 +108,11 @@ export default function SignUp() {
                     placeholder="Email address" 
                     type="email"
                     autoComplete="email"
+                    className="dark:bg-gray-800 dark:text-white dark:border-gray-700"
                     {...field} 
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="dark:text-red-400" />
               </FormItem>
             )}
           />
@@ -129,10 +128,11 @@ export default function SignUp() {
                     placeholder="Password" 
                     type="password"
                     autoComplete="new-password"
+                    className="dark:bg-gray-800 dark:text-white dark:border-gray-700"
                     {...field} 
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="dark:text-red-400" />
               </FormItem>
             )}
           />
@@ -148,10 +148,11 @@ export default function SignUp() {
                     placeholder="Confirm Password" 
                     type="password"
                     autoComplete="new-password"
+                    className="dark:bg-gray-800 dark:text-white dark:border-gray-700"
                     {...field} 
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="dark:text-red-400" />
               </FormItem>
             )}
           />
@@ -159,7 +160,7 @@ export default function SignUp() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full"
+            className="w-full dark:bg-white dark:text-black dark:hover:bg-gray-200"
           >
             {isLoading ? 'Registering...' : 'Register'}
           </Button>

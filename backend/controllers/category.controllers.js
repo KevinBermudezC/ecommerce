@@ -17,3 +17,13 @@ export const createCategory = async (req, res, next) => {
 		next(error);
 	}
 };
+
+export const getAllCategories = async (req,res,next) => {
+	try {
+		const categories = await db.category.findMany({
+			//Implement logic
+		})
+	} catch (error) {
+		next(error)
+	}
+}

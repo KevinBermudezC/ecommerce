@@ -6,4 +6,6 @@ const categoryRouter = Router();
 
 categoryRouter.post("/create-category",categoryAndProductsMiddleware, createCategory);
 
+categoryRouter.get("/categories", )
+
 export default categoryRouter;
