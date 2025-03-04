@@ -126,7 +126,6 @@ const ProductForm = ({ productId, isOpen, onClose, onSuccess }: ProductFormProps
       setRetryCount(0); // Resetear contador de reintentos
       initializeForm();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, productId]);
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
