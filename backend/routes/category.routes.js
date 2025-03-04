@@ -6,8 +6,7 @@ import {
   updateCategory, 
   deleteCategory 
 } from "../controllers/category.controllers.js";
-import authMiddleware from "../middlewares/auth.middleware.js";
-import adminMiddleware from "../middlewares/admin.middleware.js";
+
 
 const categoryRouter = Router();
 
@@ -185,5 +184,7 @@ categoryRouter.put("/:id", updateCategory);
  *         description: Categoría no encontrada
  */
 categoryRouter.delete("/:id", deleteCategory);
+
+
 
 export default categoryRouter;

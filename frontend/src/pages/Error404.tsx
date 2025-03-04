@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Home, Search } from 'lucide-react';
+import { ArrowLeft, Home } from 'lucide-react';
 
 export default function Error404() {
   const navigate = useNavigate();

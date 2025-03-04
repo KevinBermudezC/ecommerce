@@ -62,6 +62,7 @@ model Category {
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  image       String?
 
   products    Product[]
 }
@@ -112,4 +113,15 @@ model Review {
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model SiteConfig {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique // Ejemplo: 'home_banner', 'featured_products_banner'
+  type        String   // 'image', 'text', 'color'
+  value       String   // URL de la imagen o valor del texto/color
+  label       String   // Nombre amigable para mostrar en el admin
+  description String?  // Descripción de la configuración
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

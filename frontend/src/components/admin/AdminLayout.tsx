@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router';
-import { Moon, Sun, Home, Menu, Package, Tag, ShoppingCart, Users, BarChart2, Settings, LogOut, Loader2 } from 'lucide-react';
+import { Moon, Sun, Home, Menu, Package, Tag, ShoppingCart, Users, BarChart2, Settings, LogOut, Loader2, Palette } from 'lucide-react';
 import { useTheme } from '@/lib/useTheme';
 import { useAuth } from '@/lib/useAuth';
 import { Button } from '@/components/ui/button';
@@ -129,6 +129,18 @@ const AdminLayout = () => {
           >
             <Settings className="mr-2 h-4 w-4" />
             Configuración
+          </Link>
+
+          <Link 
+            to="/admin/site-config" 
+            className={`flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+              location.pathname.startsWith('/admin/site-config') 
+                ? 'bg-primary text-primary-foreground' 
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+            }`}
+          >
+            <Palette className="mr-2 h-4 w-4" />
+            Personalización
           </Link>
         </nav>
       </ScrollArea>

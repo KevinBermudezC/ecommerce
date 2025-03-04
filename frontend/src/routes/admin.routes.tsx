@@ -11,6 +11,7 @@ import OrderDetails from '../components/admin/OrderDetails';
 import UsersTable from '../components/admin/UsersTable';
 import UserForm from '../components/admin/UserForm';
 import SettingsPanel from '../components/admin/SettingsPanel';
+import SiteConfigManager from '../components/admin/SiteConfigManager';
 import { useAuth } from '@/lib/useAuth';
 import { ReactNode } from 'react';
 
@@ -168,6 +169,14 @@ const adminRoutes = {
           element: (
             <AdminRoute>
               <SettingsPanel />
+            </AdminRoute>
+          )
+        },
+        {
+          path: 'site-config',
+          element: (
+            <AdminRoute>
+              <SiteConfigManager />
             </AdminRoute>
           )
         }

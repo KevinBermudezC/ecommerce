@@ -75,6 +75,26 @@ class CategoryService {
       throw error;
     }
   }
+
+  async uploadCategoryImage(id: number, file: File): Promise<{ imageUrl: string }> {
+    try {
+      console.log(`Subiendo imagen para categoría con ID: ${id}`);
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      const response = await api.post(`/categories/${id}/image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Upload image response:', response.data);
+      
+      return response.data;
+    } catch (error) {
+      console.error(`Error subiendo imagen para categoría ${id}:`, error);
+      throw error;
+    }
+  }
 }
 
 export default new CategoryService(); 

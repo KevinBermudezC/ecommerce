@@ -505,7 +505,7 @@ const ProductForm = ({ productId, isOpen, onClose, onSuccess }: ProductFormProps
                           </Button>
                         </div>
                       ) : (
-                        <div className="flex flex-col items-center justify-center p-6 h-64 border-2 border-dashed rounded-md border-muted-foreground/25">
+                        <label className="flex flex-col items-center justify-center p-6 h-64 border-2 border-dashed rounded-md border-muted-foreground/25 cursor-pointer">
                           <Upload className="h-10 w-10 text-muted-foreground/70 mb-2" />
                           <p className="text-sm text-muted-foreground mb-1">
                             Arrastra una imagen o haz clic para seleccionar
@@ -517,9 +517,9 @@ const ProductForm = ({ productId, isOpen, onClose, onSuccess }: ProductFormProps
                             type="file"
                             accept="image/*"
                             onChange={handleImageChange}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            className="hidden"
                           />
-                        </div>
+                        </label>
                       )}
                     </div>
                   </div>

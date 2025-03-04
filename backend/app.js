@@ -17,6 +17,7 @@ import productsRouter from "./routes/products.routes.js";
 import categoryRouter from "./routes/category.routes.js";
 import ordersRouter from "./routes/orders.routes.js";
 import usersRouter from "./routes/users.routes.js";
+import siteConfigRouter from "./routes/siteConfig.routes.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 
 const app = express();
@@ -47,8 +48,17 @@ console.log("FRONTEND_URL configurado:", FRONTEND_URL);
 app.use(cors({
 	origin: FRONTEND_URL || "http://localhost:5173",
 	credentials: true,
-	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-	allowedHeaders: ['Content-Type', 'Authorization']
+	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+	allowedHeaders: [
+		'Content-Type',
+		'Authorization',
+		'X-Requested-With',
+		'Accept',
+		'Origin'
+	],
+	exposedHeaders: ['set-cookie'],
+	preflightContinue: false,
+	optionsSuccessStatus: 204
 }));
 
 // Debug para ver las peticiones que llegan
@@ -63,6 +73,7 @@ app.use("/api/products", productsRouter);
 app.use("/api/categories", categoryRouter);
 app.use("/api/orders", ordersRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/site-config", siteConfigRouter);
 
 // Middleware de manejo de errores (debe ir después de las rutas)
 app.use(errorMiddleware);

@@ -10,6 +10,7 @@ import Error404 from './pages/Error404';
 import { ThemeProvider } from './context/ThemeContext';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
+import { SiteConfigProvider } from './contexts/SiteConfigContext';
 import { Toaster } from './components/ui/sonner';
 import { ErrorBoundary } from './components/ui/error-boundary';
 
@@ -23,7 +24,8 @@ function App() {
         <ThemeProvider>
           <AuthProvider>
             <CartProvider>
-              <Toaster />
+              <SiteConfigProvider>
+                <Toaster />
                 <Routes>
                   {/* Rutas con layout común */}
                   <Route path="/" element={
@@ -120,6 +122,7 @@ function App() {
                   <Route path="*" element={<Error404 />} />
                 </Routes>
                 <Toaster richColors closeButton />
+              </SiteConfigProvider>
             </CartProvider>
           </AuthProvider>
         </ThemeProvider>
